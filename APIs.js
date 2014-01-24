@@ -24,7 +24,6 @@
         }
         req.login(user, function(err) {
           if (err) { return next(err); }
-          console.info("remember me: "+req.body.rememberMe);
           return res.redirect('/api/user/' + user._id);
         });
       })(req, res, next);
@@ -38,9 +37,6 @@
         if (!user) {
           return res.redirect('/error/id');
         }
-
-        user.firstName = app.decryptString(user.firstName);
-        user.lastName = app.decryptString(user.lastName);
         return res.redirect('/');
       });
 
@@ -50,10 +46,36 @@
       res.redirect('/');
     });
 
+    app.post("/api/v1/register", function(req, res) {
+      var user = req.body.user;
+      var name = req.body.name
+      var imageURL = req.body.imageURL;
+      var description = req.body.description;
+      return User.hashPassword(req.body.password, function(err, hash) {
+        return User.create({
+          user: user,
+          name: name,
+          pwHash: hash,
+          imageURL: imageURL,
+          description: description
+        }, function(err, user) {
+          if (err) {
+            console.log("Create user err: ", err);
+          }
+          console.log("saved user");
+          req.login(user, function(err) {
+            if (handleError(req, res, err)) { return null; }
+            req.flash('success', 'User ' + user.user + ' successfully registered.');
+            return res.redirect('/');
+          });
+        });        
+      });
+    });
 
     //CARD CREATION AND EDIT
 
     app.post("/api/whiteCard/create", function(req, res) {
+      //if (user.user !== 'RikuKat') { return res.redirect('/error'); }
       var text = req.body.text;
       var imageURL = req.body.imageURL;
       if (!imageURL) {
@@ -74,6 +96,7 @@
     });
 
     app.post("/api/whiteCard/:id/edit", function(req, res) {
+      //if (user.user !== 'RikuKat') { return res.redirect('/error'); }
       var text = req.body.text;
       var imageURL = req.body.imageURL;
       if (!imageURL) {
@@ -94,6 +117,7 @@
     });
 
     app.post("/api/blackCard/create", function(req, res) {
+      //if (user.user !== 'RikuKat') { return res.redirect('/error'); }
       var text = req.body.text;
       var imageURL = req.body.imageURL;
       if (!imageURL) {
@@ -116,6 +140,7 @@
     });
 
     app.post("/api/whiteCard/:id/edit", function(req, res) {
+      //if (user.user !== 'RikuKat') { return res.redirect('/error'); }
       var text = req.body.text;
       var imageURL = req.body.imageURL;
       if (!imageURL) {
@@ -195,6 +220,41 @@
               return res.redirect("/room/" + room._id);              
             });
           });
+        });
+      });
+    });
+
+    app.post("/api/room/join/:id", function(req, res) {
+      var id = req.params.id;
+      return Room.findById(id, function(err, room) {
+        if (err) {
+          console.log("Could not find room: ", id);
+          console.log("Err: ", err);
+        }
+        return WhiteCards.drawHand(room.numberInHand, room.whiteCards, function(err, updatedWhiteCards, cards) {
+          if (err) {
+            console.log("Draw hand error during joining: ", err);
+            return res.redirect("/error");
+          }
+          player = {[{
+            playerId: user._id,
+            cardsInHand: cards,
+            cardsOnTable: [],
+            wonCards: []
+          }]};
+          room.players.push(player);
+          return Room.update({_id: id},{
+            players: room.players,
+            whiteCards: updatedWhiteCards
+          }, function(err, room) {
+            if (err) {
+              console.log("Error joining room: ", err;
+              return res.redirect("/error")
+            } 
+            req.flash('info', 'Joined Room: ' + room.title);
+            return res.redirect("/room/" + room._id);              
+          });
+        });
         });
       });
     });
