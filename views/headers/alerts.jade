@@ -1,0 +1,34 @@
+if (messages)
+  .container
+    .span12
+      if (messages.info)
+          each message in messages.info
+            .row
+              .message.info
+                div.alert.alert-info!= message
+                  button.close(type='button', data-dismiss='alert') ×
+      if (messages.error)
+          each message in messages.error
+            .row
+               .message.error
+                  div.alert.alert-error
+                    .fui-arrow-right
+                    != " " + message
+                    button.close(type='button', data-dismiss='alert') ×
+      if (messages.success)
+          each message in messages.success
+            .row
+              .message.success
+                div.alert.alert-success
+                  .fui-arrow-right
+                  != " " + message
+                  button.close(type='button', data-dismiss='alert') ×
+      if (messages.warning)
+          each message in messages.warning
+            .row
+              .message.warning
+                div.alert.alert-warning
+                  .fui-arrow-right
+                  != " " + message
+                  button.close(type='button', data-dismiss='alert') ×
+
