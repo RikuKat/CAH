@@ -11,11 +11,30 @@
 
   module.exports = function(app) {
 
+    //GENERIC PAGES
+
+    app.get("/", function(req, res) {
+      return res.render("index", {
+        user: req.user
+      });
+    });   
+
     app.get("/error", function(req, res) {
       return res.render("error", {
         user: req.user
       });
     });
+
+    //ACCOUNT MANAGEMENT
+    app.get("/register", function(req, res) {  //might want to force a logout
+      return res.render("register");
+    }); 
+
+    app.get("/login", function(req, res) {  //might want to force a logout
+      return res.render("login");
+    }); 
+
+    //CARD CREATION AND EDITING
 
     app.get("/whiteCard/create", function(req, res) {
       return res.render("whiteCardCreate", {
@@ -61,7 +80,7 @@
 
     app.get("/room/create", function(req, res) {
       if (!user) {
-        return res.redirect("/register")
+        return res.redirect("/roomCreate")
       }
       return res.render("roomCreate", {
         user: req.user

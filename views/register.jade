@@ -1,0 +1,37 @@
+extends headers/header
+block head
+  title Register
+
+
+block content
+
+  .container
+    .col-md-6.well.center
+      form(name='userForm', action='/api/user/create', method='post')
+        h2 Create New Account
+          h4
+            p Account Name (private)
+            .controls
+              input.col-md-12.center(type='text', placeholder='emailiseasytoremember@yay.com', maxlength="50", required, name='user')
+            br
+            p Password
+            .controls
+              input.col-md-12.center(type='password', placeholder='No, it is not stored in plain text', maxlength="50", required, name='password')
+            br
+            p User Name (public)
+            .controls
+              input.col-md-12.center(type='text', placeholder='Mr. Smooth', maxlength="25", required, name='name')
+            br
+            p About Me / Description
+            .controls
+              input.col-md-12.center(type='text', placeholder='You are a good person and people say nice things about you', name='description')
+            br
+            p Profile Image / Icon
+            .controls
+              input.col-md-12.center(type='text', placeholder='http://www.directlink.com/please.png', name='imageURL')
+            br
+            .btn-toolbar
+              .btn-group
+                button.btn.btn-large.btn-primary(type='submit', id='submitbutton') Register
+              .btn-group.pull-right
+                a.btn.btn-large.btn-large(href='/') Cancel

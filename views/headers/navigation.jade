@@ -1,28 +1,28 @@
-.container.span12
-  .navbar.navbar-inverse.navbar-fixed-top
-    .navbar-inner
-        a.brand(href='/')
-          img(id='Card Against Humanity', class='input-img', src='/images/CAHLogo.png', width="200px")
-        ul.nav
+
+
+nav.navbar.navbar-default(role='navigation')
+  .navbar-header
+    a.brand(href='http://cardsagainsthumanity.com/')
+      img(id='Card Against Humanity', class='input-img', src='/images/CAHLogo.png', width="100px")
+  ul.nav.navbar-nav
+    li
+      a(href='/') Cards Against Humanity Online
+    if user
+      li
+        a(href='/room/create') Start a Game
+  ul.nav.navbar-nav.navbar-right(style='padding-right:30px')
+    li
+      if !user
+        .span2
+          a.btn.btn-block.btn-info(href='/register', style='padding:10px;') Create Account
+    if user
+      li.dropdown
+        a.dropdown-toggle(data-toggle='dropdown',href='#')=user.user
+        ul.dropdown-menu
           li
-            a(href='http://cardsagainsthumanity.com/') Cards Against Humanity
-          if user
-            li
-              a(href='/room/create') Start a Game
-        ul.nav.pull-right
+            a(href='/user/account') Manage Account
           li
-            .container-fluid
-              .row
-                if !user
-                  .span2
-                    a.btn.btn-block.btn-info(href='/register') Create Account
-          li
-            if user
-              a.dropdown-toggle(data-toggle='dropdown',href='#')=user.user
-              ul.dropdown-menu(role='menu', aria-labelledby='dLabel')
-                li(role='presentation')
-                  a(role='menuitem', tabindex='-1', href='/user/account') Manage Account
-                li(role='presentation')
-                  a(role='menuitem', tabindex='-1', href='/api/user/logout') Logout
-            else
-              a.account(href='/login') Login
+            a(href='/api/user/logout') Logout
+    else
+      li
+        a(href='/login') Login

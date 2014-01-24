@@ -1,0 +1,25 @@
+extends headers/header
+block head
+  title Create White Card
+
+
+block content
+
+  .container
+    .col-md-6.well.center
+      form(name='whiteCardForm', action='/api/whiteCard/create', method='post')
+        h2 Create New White Card
+          h4
+            p Text
+            .controls
+              input.col-md-12.center(type='text', placeholder='Thing', required, name='text')
+            br
+            p Image
+            .controls
+              input.col-md-12.center(type='text', placeholder='http://www.directlink.com/please.png', required, name='imageURL')
+            br
+            .btn-toolbar
+              .btn-group
+                button.btn.btn-large.btn-primary(type='submit', id='submitbutton') Create
+              .btn-group.pull-right
+                a.btn.btn-large.btn-large(href='/') Cancel

@@ -1,0 +1,33 @@
+extends headers/header
+block head
+  title Create Black Card
+
+
+block content
+
+  .container
+    .col-md-6.well.center
+      form(name='blackCardForm', action='/api/blackCard/create', method='post')
+        h2 Create New Black Card
+          h4
+            p Text
+            .controls
+              input.col-md-12.center(type='text', placeholder='Your mom is _____', required, name='text')
+            br
+            p Image
+            .controls
+              input.col-md-12.center(type='text', placeholder='http://www.directlink.com/please.png', required, name='imageURL')
+            br
+            p Pick
+            .controls
+              input.col-md-12.center(type='number', name='pick')
+            br
+            p Draw
+            .controls
+              input.col-md-12.center(type='number', name='draw')
+            br
+            .btn-toolbar
+              .btn-group
+                button.btn.btn-large.btn-primary(type='submit', id='submitbutton') Create
+              .btn-group.pull-right
+                a.btn.btn-large.btn-large(href='/') Cancel

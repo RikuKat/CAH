@@ -1,0 +1,25 @@
+extends headers/header
+block head
+  title Log In
+
+
+block content
+
+  .container
+    .col-md-6.well.center
+      form(name='loginForm', action='/api/user/login', method='post')
+        h2 Log In
+          h4
+            p Account Name
+            .controls
+              input.col-md-12.center(type='text', placeholder='emailiseasytoremember@yay.com', maxlength="50", required, name='user')
+            br
+            p Password
+            .controls
+              input.col-md-12.center(type='password', placeholder='The one true password', maxlength="50", required, name='password')
+            br
+            .btn-toolbar
+              .btn-group
+                button.btn.btn-large.btn-primary(type='submit', id='submitbutton') Log In
+              .btn-group.pull-right
+                a.btn.btn-large.btn-large(href='/') Cancel

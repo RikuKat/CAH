@@ -30,6 +30,8 @@
 
   var MongoStore = require('connect-mongo')(express);
 
+  var mongooseUri = process.env.MONGOLAB_URI || process.env.MONGOHQ_URL || "mongodb://localhost/CAH";
+
 
   /*
   # Configuration
@@ -77,7 +79,7 @@
       },
       store: new MongoStore({
         db: "CAH",
-        url: process.env.MONGOLAB_URI || process.env.MONGOHQ_URL || "mongodb://localhost/CAH"
+        url: mongooseUri
       })
     }));
     app.use(passport.initialize());
@@ -168,12 +170,26 @@
     });
   });
 
+  
+
+  mongoose.connect(mongooseUri, function(err, res) {
+
+    // Set up dev user
+    if (app.get && app.get("env") === "development") {
+      if (err) {
+        console.log("ERROR connecting to: " + mongooseUri + ". " + err);
+      } else {
+        console.log("connected to MongoDB " + mongooseUri);
+      }
+    }
+  });
+
 
   // load Models
   recursive_require.loadAllFilesRecursively(app, '/models');
 
   // load Routes
-  recursive_require.loadAllFilesRecursively(app, '.');
+  recursive_require.loadAllFilesRecursively(app, '/controls');
  
   /*
   # Start Server

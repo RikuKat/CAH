@@ -23,7 +23,7 @@
         type: String,
         required: false
       },
-      dscription: {
+      description: {
         type: String,
         required: false
       },

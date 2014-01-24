@@ -1,0 +1,20 @@
+.center { 
+    float: none; 
+    margin-left: auto; 
+    margin-right: auto; 
+} 
+
+.col{
+  margin-bottom: -99999px;
+  padding-bottom: 99999px;
+}
+
+.col-wrap{  
+  overflow: hidden;   
+}
+
+/* bottom row */
+.col-base{ 
+    margin-top: -15px; /* cut off top portion of bottom wells */
+}
+}

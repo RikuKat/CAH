@@ -24,21 +24,10 @@
         }
         req.login(user, function(err) {
           if (err) { return next(err); }
-          return res.redirect('/api/user/' + user._id);
+          return res.redirect('/');
         });
       })(req, res, next);
     });
-
-    app.get("/api/user/:id", function(req, res) {
-      if (checkUser(req, res)) { return null; }
-      console.log("id:" + req.params.id);
-      return app.User.findById(req.params.id, function(err, user) {
-        if (handleError(req, res, err)) { return null; }
-        if (!user) {
-          return res.redirect('/error/id');
-        }
-        return res.redirect('/');
-      });
 
     app.all("/api/user/logout", function(req, res) {
       req.logout();
@@ -46,7 +35,7 @@
       res.redirect('/');
     });
 
-    app.post("/api/v1/register", function(req, res) {
+    app.post("/api/user/create", function(req, res) {
       var user = req.body.user;
       var name = req.body.name
       var imageURL = req.body.imageURL;
@@ -64,7 +53,9 @@
           }
           console.log("saved user");
           req.login(user, function(err) {
-            if (handleError(req, res, err)) { return null; }
+            if (err) {
+              console.log('Failed to login err: ', err);
+            }
             req.flash('success', 'User ' + user.user + ' successfully registered.');
             return res.redirect('/');
           });
@@ -195,12 +186,12 @@
               console.log("Draw hand error for game owner: ", err);
               return res.redirect("/error");
             }
-            players = {[{
+            players = [{
               playerId: owner,
               cardsInHand: cards,
               cardsOnTable: [],
               wonCards: []
-            }]};
+            }];
             return Room.create({
               title: title,
               maxPlayers: maxPlayers,
@@ -213,7 +204,7 @@
               whiteCards: updatedWhiteCards,
             }, function(err, room) {
               if (err) {
-                console.log("Error creating room: ", err;
+                console.log("Error creating room: ", err);
                 return res.redirect("/error")
               } 
               req.flash('info', 'Created Room: ' + room.title);
@@ -236,25 +227,24 @@
             console.log("Draw hand error during joining: ", err);
             return res.redirect("/error");
           }
-          player = {[{
+          player = {
             playerId: user._id,
             cardsInHand: cards,
             cardsOnTable: [],
             wonCards: []
-          }]};
+          };
           room.players.push(player);
           return Room.update({_id: id},{
             players: room.players,
             whiteCards: updatedWhiteCards
           }, function(err, room) {
             if (err) {
-              console.log("Error joining room: ", err;
+              console.log("Error joining room: ", err);
               return res.redirect("/error")
             } 
             req.flash('info', 'Joined Room: ' + room.title);
             return res.redirect("/room/" + room._id);              
           });
-        });
         });
       });
     });
