@@ -25,12 +25,12 @@
         var index = Math.floor(Math.random()*whiteCards.length);
         var card = whiteCards[index];
         hand.push(card);
-        whiteCards = splice(index, 1);
+        whiteCards.splice(index, 1);
       }
       if (hand.length === numberInHand) {
         err = null;
       } else {
-        err = "Did not draw enough cards";
+        err = "Card number incorrect, hand: " + hand.length;
       }
       return callback(err, whiteCards, hand);
     };

@@ -79,8 +79,8 @@
     });
 
     app.get("/room/create", function(req, res) {
-      if (!user) {
-        return res.redirect("/roomCreate")
+      if (!req.user) {
+        return res.redirect("/register")
       }
       return res.render("roomCreate", {
         user: req.user

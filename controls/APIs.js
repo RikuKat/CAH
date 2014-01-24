@@ -158,12 +158,12 @@
     app.post("/api/room/create", function(req, res) {
       var title = req.body.title;
       var maxPlayers = req.body.maxPlayers;
-      var numberInHand = req.body.numberInHand;
+      var numberInHand = parseInt(req.body.numberInHand);
       var password = req.body.password;
       var cardsToWin = req.body.cardsToWin;
       var owner = req.user._id;  //cheeecccckkkk thisssssssssssssssssss
       var players;
-      return WhiteCards.find({}, function(err, whiteCards) {
+      return WhiteCard.find({}, function(err, whiteCards) {
         if (err) {
           console.log("White cards find err: ", err)
           return res.redirect("/error")
@@ -172,7 +172,7 @@
           console.log("No white cards found");
           return res.redirect("/error")
         }
-        return BlackCards.find({}, function(err, blackCards) {
+        return BlackCard.find({}, function(err, blackCards) {
           if (err) {
             console.log("Black cards find err: ", err)
             return res.redirect("/error")
@@ -181,7 +181,7 @@
             console.log("No black cards found");
             return res.redirect("/error")
           }
-          return WhiteCards.drawHand(numberInHand, whiteCards, function(err, updatedWhiteCards, cards) {
+          return WhiteCard.drawHand(numberInHand, whiteCards, function(err, updatedWhiteCards, cards) {
             if (err) {
               console.log("Draw hand error for game owner: ", err);
               return res.redirect("/error");
@@ -222,7 +222,7 @@
           console.log("Could not find room: ", id);
           console.log("Err: ", err);
         }
-        return WhiteCards.drawHand(room.numberInHand, room.whiteCards, function(err, updatedWhiteCards, cards) {
+        return WhiteCard.drawHand(room.numberInHand, room.whiteCards, function(err, updatedWhiteCards, cards) {
           if (err) {
             console.log("Draw hand error during joining: ", err);
             return res.redirect("/error");
