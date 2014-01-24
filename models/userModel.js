@@ -48,6 +48,20 @@
       });
     };
 
+    User.hashPassword = function(password, callback) {
+      if (!password) {
+        callback("Must pass a password");
+      }
+      return bcrypt.genSalt(10, function(err, salt) {
+        if (err) {
+          console.log("Could not generate salt err: ", err);
+          return callback(err);
+        }
+        return bcrypt.hash(password, salt, function(err, hash) {
+          return callback(err, hash);
+        });
+      });
+    };
 
 
   };
