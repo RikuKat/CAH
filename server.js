@@ -66,14 +66,14 @@
     app.use(express.query());
     app.use(express.methodOverride());
     app.use(express.session({
-      secret: "5201f8893469a4961889fb0a",
+      secret: "not exactly a secret, eh?",
       cookie: {
         maxAge: 604800000, // 1 Week
         expires: 604800000
       },
       store: new MongoStore({
-        db: "tabulaRasa",
-        url: process.env.MONGOLAB_URI || process.env.MONGOHQ_URL || "mongodb://localhost/tabulaRasa"
+        db: "CAH",
+        url: process.env.MONGOLAB_URI || process.env.MONGOHQ_URL || "mongodb://localhost/CAH"
       })
     }));
     app.use(passport.initialize());
