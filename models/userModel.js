@@ -10,7 +10,7 @@
         type: String,
         required: true,
         unique: true
-      }
+      },
       name: {
         type: String,
         required: true
@@ -18,7 +18,7 @@
       pwHash: {
         type: String,
         required: true
-      }
+      },
       imageURL: {
         type: String,
         required: false

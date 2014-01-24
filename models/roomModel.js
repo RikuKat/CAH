@@ -23,7 +23,7 @@
       },
     };
 
-    var roomSchema = mongoose.Schema({
+    var RoomSchema = mongoose.Schema({
       title: {
         type: String,
         required: true
@@ -43,7 +43,7 @@
       pwHash: {
         type: String,
         required: false
-      }
+      },
       owner: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,

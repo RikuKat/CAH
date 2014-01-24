@@ -18,11 +18,15 @@
   var mongoose = require('mongoose');
   var passportLocalMongoose = require('passport-local-mongoose');
 
+  var recursive_require = require('./recursiveRequire');
+
   var bcrypt = require('bcrypt');
 
   var flash = require('express-flash')
 
   var app = module.exports = express();
+
+  var os = require('os')
 
   var MongoStore = require('connect-mongo')(express);
 
@@ -164,14 +168,12 @@
     });
   });
 
-  // Add the data services
-  require('./app/services/dataServices/dataService')(app);
 
   // load Models
   recursive_require.loadAllFilesRecursively(app, '/models');
 
   // load Routes
-  recursive_require.loadAllFilesRecursively(app, '/');
+  recursive_require.loadAllFilesRecursively(app, '.');
  
   /*
   # Start Server
