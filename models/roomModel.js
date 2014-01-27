@@ -23,6 +23,17 @@
       },
     };
 
+    var selectedCardsSchema = {
+      playerId: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: false
+      },
+      cards: {
+        type: [mongoose.Schema.Types.ObjectId],
+        required: false
+      }
+    };
+
     var RoomSchema = mongoose.Schema({
       title: {
         type: String,
@@ -40,6 +51,16 @@
         type: Number,
         required: true
       },      
+      whiteCardTimer: {
+        type: Number,
+        required: true,
+        default: 60
+      },
+      blackCardTimer: {
+        type: Number,
+        required: true,
+        default: 180
+      },
       pwHash: {
         type: String,
         required: false
@@ -48,7 +69,7 @@
         type: [playerPartialSchema],
         required: true
       },
-      blackCard: {
+      selectedBlackCard: {
         type: mongoose.Schema.Types.ObjectId,
         required: false
       },
@@ -56,7 +77,19 @@
         type: [mongoose.Schema.Types.ObjectId],
         required: true
       },
+      discardedBlackCards: {
+        type: [mongoose.Schema.Types.ObjectId],
+        required: true
+      },
       whiteCards: {
+        type: [mongoose.Schema.Types.ObjectId],
+        required: true
+      },
+      selectedWhiteCards: {
+        type: [selectedCardsSchema],
+        required: false
+      },
+      discardedWhiteCards: {
         type: [mongoose.Schema.Types.ObjectId],
         required: true
       },

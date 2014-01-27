@@ -18,16 +18,16 @@
 
     var WhiteCard = app.WhiteCard = mongoose.model('whiteCard', WhiteCardSchema);
 
-    WhiteCard.drawHand = function(numberInHand, whiteCards, callback) {
+    WhiteCard.draw = function(number, whiteCards, callback) {
       var hand = [];
       var err;
-      for(ii=0; ii<numberInHand; ii++) {
+      for(ii=0; ii<number; ii++) {
         var index = Math.floor(Math.random()*whiteCards.length);
         var card = whiteCards[index];
         hand.push(card);
         whiteCards.splice(index, 1);
       }
-      if (hand.length === numberInHand) {
+      if (hand.length === number) {
         err = null;
       } else {
         err = "Card number incorrect, hand: " + hand.length;
