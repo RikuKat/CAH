@@ -44,11 +44,6 @@
         type: String,
         required: false
       },
-      owner: {
-        type: mongoose.Schema.Types.ObjectId,
-        required: true,
-        index: true
-      },
       players: {
         type: [playerPartialSchema],
         required: true

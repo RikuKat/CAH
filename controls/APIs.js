@@ -41,6 +41,10 @@
       var imageURL = req.body.imageURL;
       var description = req.body.description;
       return User.hashPassword(req.body.password, function(err, hash) {
+        if (err) {
+          console.log("Failed to hash password");
+          return res.redirect("/error");
+        }
         return User.create({
           user: user,
           name: name,
@@ -161,7 +165,6 @@
       var numberInHand = parseInt(req.body.numberInHand);
       var password = req.body.password;
       var cardsToWin = req.body.cardsToWin;
-      var owner = req.user._id;  //cheeecccckkkk thisssssssssssssssssss
       var players;
       return WhiteCard.find({}, function(err, whiteCards) {
         if (err) {
@@ -187,7 +190,7 @@
               return res.redirect("/error");
             }
             players = [{
-              playerId: owner,
+              playerId: req.user._id,
               cardsInHand: cards,
               cardsOnTable: [],
               wonCards: []
@@ -197,8 +200,7 @@
               maxPlayers: maxPlayers,
               cardsToWin: cardsToWin,
               numberInHand: numberInHand,
-              password: password,
-              owner: owner,
+              pwHash: hash,
               players: players,
               blackCards: blackCards,
               whiteCards: updatedWhiteCards,
@@ -246,6 +248,30 @@
             return res.redirect("/room/" + room._id);              
           });
         });
+      });
+    });
+
+    app.post("/api/room/leave/:id", function(req, res) {
+      var id = req.params.id;
+      return Room.findById(id, function(err, room) {
+        if (err) {
+          console.log("Could not find room: ", id);
+          console.log("Err: ", err);
+        }
+        for (ii=0; ii<room.players.length; ii++) {
+          if (room.players[ii].playerId === user._id) {  //may need to convert to string
+            room.players.splice(ii, 1);
+            console.log("Removed player: " + room.players[ii].playerId);
+            break;
+          }
+          if (ii === room.players.length-1) {
+            console.log("Could not find player to remove");
+            req.flash('error', 'May not have left following room properly: ' + room.title);
+            return res.redirect("/");
+          }
+        }
+        req.flash('info', 'Left room: ' + room.title);
+        return res.redirect("/");              
       });
     });
 
