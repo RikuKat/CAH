@@ -165,6 +165,7 @@
       var numberInHand = parseInt(req.body.numberInHand);
       var password = req.body.password;
       var cardsToWin = req.body.cardsToWin;
+      var pwHash;
       var players;
       return WhiteCard.find({}, function(err, whiteCards) {
         if (err) {
@@ -195,22 +196,33 @@
               cardsOnTable: [],
               wonCards: []
             }];
-            return Room.create({
-              title: title,
-              maxPlayers: maxPlayers,
-              cardsToWin: cardsToWin,
-              numberInHand: numberInHand,
-              pwHash: hash,
-              players: players,
-              blackCards: blackCards,
-              whiteCards: updatedWhiteCards,
-            }, function(err, room) {
+            return Room.hashPassword(password, function(err, hash) {
               if (err) {
-                console.log("Error creating room: ", err);
-                return res.redirect("/error")
-              } 
-              req.flash('info', 'Created Room: ' + room.title);
-              return res.redirect("/room/" + room._id);              
+                console.log("Failed to hash password");
+                return res.redirect("/error");
+              }
+              if (password === '') {
+                pwHash = null;
+              } else {
+                pwHash = hash;
+              }
+              return Room.create({
+                title: title,
+                maxPlayers: maxPlayers,
+                cardsToWin: cardsToWin,
+                numberInHand: numberInHand,
+                pwHash: pwHash,
+                players: players,
+                blackCards: blackCards,
+                whiteCards: updatedWhiteCards,
+              }, function(err, room) {
+                if (err) {
+                  console.log("Error creating room: ", err);
+                  return res.redirect("/error")
+                } 
+                req.flash('info', 'Created Room: ' + room.title);
+                return res.redirect("/room/" + room._id);              
+              });
             });
           });
         });
