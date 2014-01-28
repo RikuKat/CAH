@@ -1,0 +1,55 @@
+extends headers/header
+block head
+  title= room.name
+  script.
+
+    var source = new EventSource('/stream');
+
+    source.addEventListener('message', function(e) {
+      console.log(e.data);
+    }, false);
+
+    function submitCards() {
+      console.log("Attempting to submit cards for turn");
+      //Find the selected cards
+      var selectedWhiteCards = [];
+      for (ii=0; ii<(room.numberInHand + selectedBlackCard.draw); ii++) {
+        if ($("#card"+ii).hasClass("selected")) {
+          selectedWhiteCards.push(ii);
+        }
+      }
+      var req = {
+        dataType: "json",
+        type: "POST",
+        url: "/api/room/" + room._id + "/whiteCardSubmit",
+        data: {cards: JSON.stringify(selectedWhiteCards)},
+      };
+      $.ajax(req);
+    }
+
+    function select(cardId) {
+      console.log("Selecting card: ", cardId);
+      if ($("#"+cardId).hasClass("selected") {
+        $("#"+cardId).addClass("unselected");
+        $("#"+cardId).removeClass("selected");
+      } else if ($("#"+cardId).hasClass("unselected") {
+        $("#"+cardId).addClass("selected");
+        $("#"+cardId).removeClass("unselected");
+      } else {
+        console.log("Err: Could not find class on select");
+      }
+    }
+
+
+
+block content
+
+  .container
+    .col-lg-12.well.center
+      table
+        thead
+        tbody
+          tr
+            td
+              img.unselected(id="card0", src="", alt="", width='300px', onClick="select('card0')")
+      button.btn.btn-large.btn-primary(onClick="submitCards()") Submit
