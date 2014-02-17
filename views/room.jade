@@ -3,6 +3,7 @@ block head
   title= room.name
   script.
 
+    //Server Sent Events
     var source = new EventSource('/stream');
 
     source.addEventListener('message', function(e) {

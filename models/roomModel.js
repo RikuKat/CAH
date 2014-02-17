@@ -108,7 +108,7 @@
       }
       return bcrypt.compare(password, hash, function(err, res) {
         if (err) {
-          console.log(err);
+          console.log("Err in comparing the password and hash:", err);
         }
         return callback(err, res);
       });
@@ -124,6 +124,9 @@
           return callback(err);
         }
         return bcrypt.hash(password, salt, function(err, hash) {
+          if (err) {
+            console.log("Bcrypt has err: ", err);
+          }
           return callback(err, hash);
         });
       });
